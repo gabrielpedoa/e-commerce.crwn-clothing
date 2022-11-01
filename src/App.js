@@ -1,40 +1,30 @@
-import Directory from './components/directory/directory.component';
-import './components/category-item/category-item.component';
-import './components/directory/directory.styles.scss'
+import { Routes, Route } from 'react-router-dom'
+import Home from "./components/routes/home/home.component";
+import Navigation from './components/navigation/navigation.component';
+import Authentication from './components/routes/authentication/authentication.component';
+import Shop from './components/routes/shop/shop.component';
+
+
+const Contact = () => {
+  return (
+    <div>
+      <h1>i'm the contact page</h1>
+    </div>
+  );
+}
 
 
 const App = () => {
-
-  const categories = [   /* criado um array contendo objetos para que possamos "exportar" esses dados para os props */
-    {
-      id: 1,
-      title: 'Hats',
-      imageUrl: 'https://i.ibb.co/cvpntL1/hats.png'
-    },
-    {
-      id: 2,
-      title: 'Jackets',
-      imageUrl: 'https://i.ibb.co/px2tCc3/jackets.png'
-    },
-    {
-      id: 3,
-      title: 'Sneakers',
-      imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png'
-    },
-    {
-      id: 4,
-      title: 'Womens',
-      imageUrl: 'https://i.ibb.co/GCCdy8t/womens.png'
-    },
-    {
-      id: 5,
-      title: 'Mens',
-      imageUrl: 'https://i.ibb.co/R70vBrQ/men.png'
-    },
-  ]
-
   return (
-    <Directory categories={categories}/>
+    <Routes>
+      <Route path='/' element={<Navigation />}>
+        <Route path='/shop' element={<Shop />} />
+        <Route path='contact' element={<Contact />} />
+        <Route index element={<Home />} />
+        <Route path='auth' element={<Authentication />} />
+      </Route>
+    </Routes>
+
   );
 }
 
