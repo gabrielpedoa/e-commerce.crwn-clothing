@@ -1,32 +1,40 @@
-import { Routes, Route } from 'react-router-dom'
-import Home from "./components/routes/home/home.component";
-import Navigation from './components/navigation/navigation.component';
-import Authentication from './components/routes/authentication/authentication.component';
-import Shop from './components/routes/shop/shop.component';
-import Checkout from './components/routes/checkout/checkout.component';
+import { useEffect, lazy, Suspense } from 'react';
+import { useDispatch } from 'react-redux';
 
-const Contact = () => {
-  return (
-    <div>
-      <h1>i'm the contact page</h1>
-    </div>
-  );
-}
+import { Routes, Route } from 'react-router-dom';
 
+import Spinner from './components/spinner/spinner.component';
+import { checkUserSession } from './store/user/user.action';
+
+const Navigation = lazy(() =>
+  import('./routes/navigation/navigation.component')
+);
+const Shop = lazy(() => import('./routes/shop/shop.component'));
+const Checkout = lazy(() => import('./routes/checkout/checkout.component'));
+const Home = lazy(() => import('./routes/home/home.component'));
+const Authentication = lazy(() =>
+  import('./routes/authentication/authentication.component')
+);
 
 const App = () => {
-  return (
-    <Routes>
-      <Route path='/' element={<Navigation />}>
-        <Route path='shop/*' element={<Shop />} />
-        <Route path='contact' element={<Contact />} />
-        <Route index element={<Home />} />
-        <Route path='auth' element={<Authentication />} />
-        <Route path='checkout' element={<Checkout />} />
-      </Route>
-    </Routes>
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(checkUserSession());
+  }, []);
+
+  return (
+    <Suspense fallback={<Spinner />}>
+      <Routes>
+        <Route path='/' element={<Navigation />}>
+          <Route index element={<Home />} />
+          <Route path='shop/*' element={<Shop />} />
+          <Route path='auth' element={<Authentication />} />
+          <Route path='checkout' element={<Checkout />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
-}
+};
 
 export default App;
